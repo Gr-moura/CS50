@@ -1,9 +1,9 @@
-#include <stdint.h>
 #include <stdio.h>
 
 int main()
 {
-    double a = 257 / 0.3;
-    printf("%lf", a);
+    char filename[8] = "000.jpg";
+
+    printf("%s", filename);
     return 0;
 }
