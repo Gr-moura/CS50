@@ -50,6 +50,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+// Check if a pixel is within image bounds
 int isValidPixel(int height, int width, int row, int column)
 {
     return row >= 0 && row < height && column >= 0 && column < width;
@@ -104,50 +105,37 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+// Function prototypes
+void calculateSobelValues(int height, int width, RGBTRIPLE image[height][width], int i, int j, int *red, int *green,
+                          int *blue);
+
+// Clamp a value to the range [0, 255]
+int clamp(int value)
+{
+    return value > 255 ? 255 : (value < 0 ? 0 : value);
+}
+
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
     RGBTRIPLE temp[height][width];
 
+    // Compute edges for each pixel
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            int redSumGX = 0;
-            int greenSumGX = 0;
-            int blueSumGX = 0;
+            int red, green, blue;
+            calculateSobelValues(height, width, image, i, j, &red, &green, &blue);
 
-            int redSumGY = 0;
-            int greenSumGY = 0;
-            int blueSumGY = 0;
-
-            for (int k = 0; k < KERNEL_SIZE; k++)
-            {
-                int curPixelRow = i + kernel.possiblePixels[k][0];
-                int curPixelColumn = j + kernel.possiblePixels[k][1];
-
-                if (isValidPixel(height, width, curPixelRow, curPixelColumn))
-                {
-                    redSumGX += image[curPixelRow][curPixelColumn].rgbtRed * kernel.gx[k];
-                    greenSumGX += image[curPixelRow][curPixelColumn].rgbtGreen * kernel.gx[k];
-                    blueSumGX += image[curPixelRow][curPixelColumn].rgbtBlue * kernel.gx[k];
-
-                    redSumGY += image[curPixelRow][curPixelColumn].rgbtRed * kernel.gy[k];
-                    greenSumGY += image[curPixelRow][curPixelColumn].rgbtGreen * kernel.gy[k];
-                    blueSumGY += image[curPixelRow][curPixelColumn].rgbtBlue * kernel.gy[k];
-                }
-            }
-
-            int red = round(sqrt(redSumGX * redSumGX + redSumGY * redSumGY));
-            int green = round(sqrt(greenSumGX * greenSumGX + greenSumGY * greenSumGY));
-            int blue = round(sqrt(blueSumGX * blueSumGX + blueSumGY * blueSumGY));
-
-            temp[i][j].rgbtRed = red > 255 ? 255 : red;
-            temp[i][j].rgbtGreen = green > 255 ? 255 : green;
-            temp[i][j].rgbtBlue = blue > 255 ? 255 : blue;
+            // Clamp values to ensure they stay within the 0-255 range
+            temp[i][j].rgbtRed = clamp(red);
+            temp[i][j].rgbtGreen = clamp(green);
+            temp[i][j].rgbtBlue = clamp(blue);
         }
     }
 
+    // Copy the computed values back to the original image
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -157,4 +145,35 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     }
 
     return;
+}
+
+// Calculate the Sobel values for a pixel
+void calculateSobelValues(int height, int width, RGBTRIPLE image[height][width], int i, int j, int *red, int *green,
+                          int *blue)
+{
+    int redSumGX = 0, greenSumGX = 0, blueSumGX = 0;
+    int redSumGY = 0, greenSumGY = 0, blueSumGY = 0;
+
+    // Iterate through the kernel
+    for (int k = 0; k < KERNEL_SIZE; k++)
+    {
+        int curPixelRow = i + kernel.possiblePixels[k][0];
+        int curPixelColumn = j + kernel.possiblePixels[k][1];
+
+        if (isValidPixel(height, width, curPixelRow, curPixelColumn))
+        {
+            redSumGX += image[curPixelRow][curPixelColumn].rgbtRed * kernel.gx[k];
+            greenSumGX += image[curPixelRow][curPixelColumn].rgbtGreen * kernel.gx[k];
+            blueSumGX += image[curPixelRow][curPixelColumn].rgbtBlue * kernel.gx[k];
+
+            redSumGY += image[curPixelRow][curPixelColumn].rgbtRed * kernel.gy[k];
+            greenSumGY += image[curPixelRow][curPixelColumn].rgbtGreen * kernel.gy[k];
+            blueSumGY += image[curPixelRow][curPixelColumn].rgbtBlue * kernel.gy[k];
+        }
+    }
+
+    // Calculate Sobel magnitude
+    *red = round(sqrt(redSumGX * redSumGX + redSumGY * redSumGY));
+    *green = round(sqrt(greenSumGX * greenSumGX + greenSumGY * greenSumGY));
+    *blue = round(sqrt(blueSumGX * blueSumGX + blueSumGY * blueSumGY));
 }
