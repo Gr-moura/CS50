@@ -5,4 +5,4 @@ run: recover
 	./recover card.raw
 
 clean:
-	rm -f *.jpg
+	rm -f *.jpg recover
