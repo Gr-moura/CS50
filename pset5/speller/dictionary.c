@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <strings.h>
 
 #include "dictionary.h"
@@ -82,29 +83,35 @@ bool load(const char *dictionary)
     char buffer[LENGTH + 5];
 
     while (fgets(buffer, sizeof(buffer), file))
-    { /*
-         char *word = NULL;
-         sscanf(buffer, "%s", word);
+    {
+        char *word = buffer;
+        word[strlen(word) - 1] = '\0';
 
-         int hashValue = hash(word);
-         node *curNode = table[1];
+        int hashValue = hash(word);
+        node *curNode = table[hashValue];
 
-                  while (strcmp(curNode->word, "\0") != 0)
-                  {
+        if (curNode == NULL)
+        {
+            curNode = calloc(1, sizeof(node));
+            if (curNode == NULL)
+                return false;
+        }
 
-                      if (curNode->next == NULL)
-                      {
-                          curNode->next = calloc(1, sizeof(node));
+        while (strcmp(curNode->word, "\0") != 0)
+        {
+            if (curNode->next == NULL)
+            {
+                curNode->next = calloc(1, sizeof(node));
 
-                          if (curNode->next == NULL)
-                              return false;
-                      }
+                if (curNode->next == NULL)
+                    return false;
+            }
 
-                      curNode = curNode->next;
-                  }
+            curNode = curNode->next;
+        }
 
-                  strcpy(curNode->word, word);
-                  words++;*/
+        strcpy(curNode->word, word);
+        words++;
     }
 
     return true;
