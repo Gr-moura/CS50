@@ -92,10 +92,10 @@ bool load(const char *dictionary)
     {
         // Remove the newline character if present
         buffer[strcspn(buffer, "\n")] = '\0';
-
         char *word = buffer;
 
         int hashValue = hash(word);
+
         node *newNode = calloc(1, sizeof(node));
         if (newNode == NULL)
         {

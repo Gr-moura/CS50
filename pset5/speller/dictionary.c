@@ -90,33 +90,22 @@ bool load(const char *dictionary)
 
     while (fgets(buffer, sizeof(buffer), file))
     {
+        // Remove the newline character if present
         char *word = buffer;
         word[strlen(word) - 1] = '\0';
 
+        node *newNode = calloc(1, sizeof(node));
+        if (newNode == NULL)
+        {
+            return false;
+        }
+
         int hashValue = hash(word);
-        node *curNode = table[hashValue];
+        newNode->next = table[hashValue];
+        strcpy(newNode->word, word);
 
-        if (curNode == NULL)
-        {
-            curNode = calloc(1, sizeof(node));
-            if (curNode == NULL)
-                return false;
-        }
+        table[hashValue] = newNode;
 
-        while (strcmp(curNode->word, "\0") != 0)
-        {
-            if (curNode->next == NULL)
-            {
-                curNode->next = calloc(1, sizeof(node));
-
-                if (curNode->next == NULL)
-                    return false;
-            }
-
-            curNode = curNode->next;
-        }
-
-        strcpy(curNode->word, word);
         words++;
     }
 
