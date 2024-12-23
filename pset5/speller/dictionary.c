@@ -74,6 +74,7 @@ unsigned int hash(const char *word)
     return beforeFirstLetter + beforeSecondLetter + beforeThirdLetter;
 }
 
+// Number of words in dictionary
 unsigned int words = 0;
 
 // Loads dictionary into memory, returning true if successful, else false
@@ -86,7 +87,7 @@ bool load(const char *dictionary)
         return false;
     }
 
-    char buffer[LENGTH + 5];
+    char buffer[LENGTH + 2];
 
     while (fgets(buffer, sizeof(buffer), file))
     {
@@ -94,9 +95,10 @@ bool load(const char *dictionary)
         char *word = buffer;
         word[strlen(word) - 1] = '\0';
 
-        node *newNode = calloc(1, sizeof(node));
+        node *newNode = malloc(sizeof(node));
         if (newNode == NULL)
         {
+            fclose(file);
             return false;
         }
 
