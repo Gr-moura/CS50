@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     // Define allowable filters
-    char *filters = "begr";
+    char *filters = "begi";
 
     // Get filter flag and check validity
     char filter = getopt(argc, argv, filters);
@@ -61,8 +61,7 @@ int main(int argc, char *argv[])
     fread(&bi, sizeof(BITMAPINFOHEADER), 1, inptr);
 
     // Ensure infile is (likely) a 24-bit uncompressed BMP 4.0
-    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 ||
-        bi.biBitCount != 24 || bi.biCompression != 0)
+    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 || bi.biBitCount != 24 || bi.biCompression != 0)
     {
         fclose(outptr);
         fclose(inptr);
@@ -100,25 +99,25 @@ int main(int argc, char *argv[])
     // Filter image
     switch (filter)
     {
-        // Blur
-        case 'b':
-            blur(height, width, image);
-            break;
+    // Blur
+    case 'b':
+        blur(height, width, image);
+        break;
 
-        // Edges
-        case 'e':
-            edges(height, width, image);
-            break;
+    // Edges
+    case 'e':
+        edges(height, width, image);
+        break;
 
-        // Grayscale
-        case 'g':
-            grayscale(height, width, image);
-            break;
+    // Grayscale
+    case 'g':
+        grayscale(height, width, image);
+        break;
 
-        // Reflect
-        case 'r':
-            reflect(height, width, image);
-            break;
+    // Invert
+    case 'i':
+        invert(height, width, image);
+        break;
     }
 
     // Write outfile's BITMAPFILEHEADER
