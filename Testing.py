@@ -1,3 +1,9 @@
-people = {"name": "Alice", "city": "Seattle", "cake": "Chocolate"}
+from cs50 import get_string
+people: dict = {"name": "Alice", "city": "Seattle", "cake": "Chocolate"}
 
-print(len(str(2343)))
+s: str = "Abencads"
+
+def test(x: str) -> str:
+    return "Hello"
+
+print(test(s))

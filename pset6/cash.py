@@ -1,13 +1,12 @@
 from cs50 import get_float
 
-change = get_float("Change owed: ")
+change = None
+while change is None or change < 0:
+    change = get_float("Change: ")
 
-while change < 0:
-    change = get_float("Change owed: ")
+coin_values: list[int] = [25, 10, 5, 1]
 
-coin_values = [25, 10, 5, 1]
-
-cents = round(change * 100)
+cents: int = round(change * 100)
 coins = 0
 
 for value in coin_values:

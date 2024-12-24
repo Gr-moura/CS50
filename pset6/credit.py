@@ -36,10 +36,11 @@ def check_credit_card(credit_card):
 
     for i in range(len(credit_card) - 1, -1, -1):
         digit = int(credit_card[i])
+        
         if (len(credit_card) - i) % 2 == 0:
             digit *= 2
-            if digit > 9:
-                digit -= 9
+            digit = digit - 9 if digit > 9 else digit
+            
         total += digit
 
     return total % 10 == 0
