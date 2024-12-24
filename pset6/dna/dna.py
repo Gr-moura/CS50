@@ -1,5 +1,4 @@
 import csv
-import copy
 import sys
 
 
@@ -22,16 +21,25 @@ def main():
         sequence = file.read()
 
     # Find longest match of each STR in DNA sequence
-    copia = copy.deepcopy(database)
-    for row in copia:
-        for key in row:
-            if key != "name":
-                row[key] = str(longest_match(sequence, key))
+    longest_str = {}
+    for STR in database[0]:
+        if STR == "name":
+            continue
+
+        longest_str[STR] = longest_match(sequence, STR)
     
     # Check database for matching profiles
-    for i in range(len(database)):
-        if (database[i] == copia[i]):
-            print(database[i]["name"])
+    for person in database:
+        match = True
+        for STR in person:
+            if STR == "name":
+                continue
+
+            if person[STR] != str(longest_str[STR]):
+                match = False
+                break
+        if match:
+            print(person["name"])
             break
     else:
         print("No match")
