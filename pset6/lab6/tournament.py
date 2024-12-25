@@ -9,7 +9,6 @@ N = 1000
 
 
 def main():
-
     # Ensure correct usage
     if len(sys.argv) != 2:
         sys.exit("Usage: python tournament.py FILENAME")
@@ -21,8 +20,9 @@ def main():
         for row in reader:
             row["rating"] = int(row["rating"])
             teams.append(row)
-
-    counts = {team["team"]: 0 for team in teams}
+            
+    
+    counts = {team["team"] : 0 for team in teams}
     # Simulate N tournaments and keep track of win counts
     for i in range(N):
         winner = simulate_tournament(teams)
@@ -41,6 +41,7 @@ def simulate_game(team1, team2):
     probability = 1 / (1 + 10 ** ((rating2 - rating1) / 600))
     return random.random() < probability
 
+
 # returns the half of the teams that won
 def simulate_round(teams):
     """Simulate a round. Return a list of winning teams."""
@@ -56,14 +57,13 @@ def simulate_round(teams):
     return winners
 
 
-def simulate_tournament(teams: list[str]) -> str:
+def simulate_tournament(teams: list[dict]) -> str:
     """Simulate a tournament. Return name of winning team."""
-
-    winner = ""
+ 
     while (len(teams) > 1):
         teams = simulate_round(teams)
     
-    return teams[0]
+    return teams[0]["team"]
 
 
 if __name__ == "__main__":
