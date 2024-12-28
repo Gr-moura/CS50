@@ -3,8 +3,8 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "database": "pset7/movies/movies.db",
-            "name": "movies.db"
+            "database": "pset7/fiftyville/fiftyville.db",
+            "name": "crime.db"
         }
     ],
     "sqltools.useNodeRuntime": true
