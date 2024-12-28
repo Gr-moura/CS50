@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "pset7/movies/movies.db",
+            "name": "movies.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}
